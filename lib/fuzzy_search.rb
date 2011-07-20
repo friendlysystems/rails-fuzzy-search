@@ -23,7 +23,7 @@ module FuzzySearch
         # put a space in front and at the end to emphasize the endings
         word = ' ' + self.class.normalize(p) + ' '
         # tokenize the word and put each token in the database
-        # and allow double token (without doubles the metric is 
+        # and allow double token (without doubles the metric is
         # slightly different)
         word_as_chars = word.mb_chars
         (0..word_as_chars.length - 3).each do |idx|
@@ -47,7 +47,7 @@ module FuzzySearch
         cattr_accessor :fuzzy_ref
         self.fuzzy_ref = model.name.underscore
         has_many fuzzy_trigram_type_symbol.to_s.tableize.to_sym
-        named_scope :fuzzy_find_scope, lambda { |words| generate_fuzzy_find_scope_params(words) }
+        scope :fuzzy_find, lambda { |words| generate_fuzzy_find_scope_params(words) }
       end
     end
 
@@ -65,10 +65,6 @@ module FuzzySearch
       self.fuzzy_threshold = 5
     end
 
-    def fuzzy_find(words)
-      fuzzy_find_scope(words).all
-    end
-
     private
 
     def generate_fuzzy_find_scope_params(words)
@@ -84,7 +80,7 @@ module FuzzySearch
       end
       trigrams = trigrams.flatten.uniq
 
-      # Transform the list of columns in the searchable entity into 
+      # Transform the list of columns in the searchable entity into
       # a SQL fragment like:
       # "fuzzy_ref.id, fuzzy_ref.field1, fuzzy_ref.field2, ..."
       entity_fields = columns.map {|col| fuzzy_ref_table + "." + col.name}.join(", ")
