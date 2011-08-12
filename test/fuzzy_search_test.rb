@@ -1,8 +1,5 @@
 require 'rubygems'
 require 'test/unit'
-require 'dm-validations'
-require 'dm-aggregates'
-require 'dm-timestamps'
 require "fuzzy_search"
 
 $KCODE = 'u'
@@ -14,7 +11,7 @@ DataMapper.setup(:default, {
 
 if ENV['DEBUG']
   DataMapper::Logger.new(STDOUT, 0)
-  DataObjects::Sqlite3.logger = DataObjects::Logger.new(STDOUT, 0) 
+  DataObjects::Sqlite3.logger = DataObjects::Logger.new(STDOUT, 0)
 end
 
 class Searchable
@@ -23,12 +20,10 @@ class Searchable
   def self.search(query)
     fuzzy_find(query)
   end
-  
+
 end
 
 class UserTrigram
-
-  include DataMapper::Resource
 
   property :id, Integer, :serial => true
 
@@ -70,7 +65,7 @@ class User < Searchable
   include FuzzySearch
 
   fuzzy_search_attributes :firstname, :surname
-  
+
   property :id, Integer, :serial => true
 
   property :surname, String, :nullable => false , :format => /^[^<'&">]*$/, :length => 32
@@ -81,7 +76,7 @@ end
 class EmailTrigram
 
   include DataMapper::Resource
- 
+
   property :id, Integer, :serial => true
 
   property :email_id, Integer
@@ -97,11 +92,11 @@ class Email < Searchable
   include FuzzySearch
 
   fuzzy_search_attributes :address
-  
+
   property :id, Integer, :serial => true
 
   property :address, String, :nullable => false , :format => /^[^<'&">]*$/, :length => 32
- 
+
   property :deleted_at, ParanoidDateTime
 
 end
