@@ -62,7 +62,12 @@ module FuzzySearch
       cattr_accessor :fuzzy_props
       self.fuzzy_props = properties
       cattr_accessor :fuzzy_threshold
-      self.fuzzy_threshold = 5
+      self.fuzzy_threshold ||= 5
+    end
+
+    def fuzzy_threshold threshold
+      cattr_accessor :fuzzy_threshold
+      self.fuzzy_threshold = threshold
     end
 
     private
